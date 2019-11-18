@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://www.guotingyan.cn</id>
+    <id>https://github.com/gty215615</id>
     <title>Gridea</title>
-    <updated>2019-11-18T11:06:47.755Z</updated>
+    <updated>2019-11-18T11:07:28.399Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="http://www.guotingyan.cn"/>
-    <link rel="self" href="http://www.guotingyan.cn/atom.xml"/>
+    <link rel="alternate" href="https://github.com/gty215615"/>
+    <link rel="self" href="https://github.com/gty215615/atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>http://www.guotingyan.cn/images/avatar.png</logo>
-    <icon>http://www.guotingyan.cn/favicon.ico</icon>
+    <logo>https://github.com/gty215615/images/avatar.png</logo>
+    <icon>https://github.com/gty215615/favicon.ico</icon>
     <rights>All rights reserved 2019, Gridea</rights>
     <entry>
         <title type="html"><![CDATA[从零开始学数据结构之队列（二）]]></title>
-        <id>http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-zhi-dui-lie-er</id>
-        <link href="http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-zhi-dui-lie-er">
+        <id>https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-zhi-dui-lie-er</id>
+        <link href="https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-zhi-dui-lie-er">
         </link>
         <updated>2019-11-18T10:04:57.000Z</updated>
         <summary type="html"><![CDATA[<p>之前学习了队列的顺序存储结构的代码实现，以及循环队列的实现，队列还可以使用链式存储结构来实现，并且链式存储的队列不会出现“溢出”的现象。</p>
@@ -123,8 +123,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[从零开始学数据结构之队列（一）]]></title>
-        <id>http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-3dui-lie</id>
-        <link href="http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-3dui-lie">
+        <id>https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-3dui-lie</id>
+        <link href="https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-3dui-lie">
         </link>
         <updated>2019-11-17T09:16:04.000Z</updated>
         <summary type="html"><![CDATA[<p>队列也是一种操作受限制的线性表，它拥有队首与队尾，并规定只能从队首删除元素（出队），从队尾添加元素（入队），队列的特点就是先进先出(First In First Out)。</p>
@@ -253,8 +253,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[从零开始学数据结构之栈]]></title>
-        <id>http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-2-zhan</id>
-        <link href="http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-2-zhan">
+        <id>https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-2-zhan</id>
+        <link href="https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-2-zhan">
         </link>
         <updated>2019-11-13T12:51:22.000Z</updated>
         <summary type="html"><![CDATA[<p>栈是一种只允许在一端进行插入和删除的线性表，栈也是一种线性表,栈的特点是后进先出(Last In First Out)。</p>
@@ -328,8 +328,8 @@ struct SqStack{
     </entry>
     <entry>
         <title type="html"><![CDATA[从零开始学数据结构之线性表]]></title>
-        <id>http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-1-xian-xing-biao</id>
-        <link href="http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-1-xian-xing-biao">
+        <id>https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-1-xian-xing-biao</id>
+        <link href="https://github.com/gty215615/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-1-xian-xing-biao">
         </link>
         <updated>2019-11-10T12:50:01.000Z</updated>
         <summary type="html"><![CDATA[<p>线性表是一种线性存储结构的，除了首位元素，每一个元素都有一个直接前驱；除了末尾元素，每一个元素都有一个直接后继。</p>
@@ -582,8 +582,8 @@ List TailInsert(List &amp;L)
     </entry>
     <entry>
         <title type="html"><![CDATA[webpack引入第三方包]]></title>
-        <id>http://www.guotingyan.cn/post/webpack-yin-ru-di-san-fang-bao</id>
-        <link href="http://www.guotingyan.cn/post/webpack-yin-ru-di-san-fang-bao">
+        <id>https://github.com/gty215615/post/webpack-yin-ru-di-san-fang-bao</id>
+        <link href="https://github.com/gty215615/post/webpack-yin-ru-di-san-fang-bao">
         </link>
         <updated>2019-11-08T11:29:29.000Z</updated>
         <summary type="html"><![CDATA[<blockquote>
@@ -612,8 +612,8 @@ List TailInsert(List &amp;L)
     </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>http://www.guotingyan.cn/post/hello-gridea</id>
-        <link href="http://www.guotingyan.cn/post/hello-gridea">
+        <id>https://github.com/gty215615/post/hello-gridea</id>
+        <link href="https://github.com/gty215615/post/hello-gridea">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
