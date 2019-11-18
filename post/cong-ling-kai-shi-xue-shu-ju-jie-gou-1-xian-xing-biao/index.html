@@ -1,0 +1,441 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>从零开始学数据结构之线性表 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/gty215615//favicon.ico?v=1574074713743">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/gty215615//styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/gty215615/">
+  <img class="avatar" src="https://github.com/gty215615//images/avatar.png?v=1574074713743" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              从零开始学数据结构之线性表
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-11-10
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+                <a href="https://github.com/gty215615//tag/4sbw5IoQL" class="post-tag">
+                  # 数据结构
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://tva4.sinaimg.cn/large/0072Vf1pgy1fodqo0e8fzj31hc0xcqv5.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>线性表是一种线性存储结构的，除了首位元素，每一个元素都有一个直接前驱；除了末尾元素，每一个元素都有一个直接后继。</p>
+<!-- more -->
+<pre><code> // 对于线性表的常用操作如下
+	 InitList(&amp;L)  初始化线性表
+	 Lenght(&amp;L) 返回表长
+	 LocateElem(&amp;L,e) 按值来查找元素，在表L中查找指定元素
+	 GetElem(&amp;L,i) 按序号查找元素，在表L查找指定位置的元素
+	 ListInsert(&amp;L,i,e) 将元素e插如表L的指定位置i处
+	 ListDelete(&amp;L,i,&amp;e) 将表L的第i个元素删除并用e返回删除元素的值
+	 PrintfList(&amp;L) 打印线性表L
+	 Empty(&amp;L) 判断线性表L是否为空，空则返回true，否则返回false
+	 DestoryList(&amp;L) 销毁线性表L
+</code></pre>
+<h1 id="1顺序表">1.顺序表</h1>
+<blockquote>
+<p>顺序表是一种顺序存储结构的线性表，顺序表的逻辑相邻的两个元素在存储在物理结构上也相邻。</p>
+</blockquote>
+<h3 id="1-顺序表的数据结构">1. 顺序表的数据结构</h3>
+<pre><code class="language-c++">		#define MaxSize 50
+		typedef struct sq *SqList;
+		struct sq {
+				ElemType data[MaxSize];
+				int Length;
+		};
+		typedef SqList SL;
+</code></pre>
+<h3 id="2-顺序表的常用操作">2.    顺序表的常用操作</h3>
+<h4 id="按值查找">按值查找</h4>
+<pre><code class="language-c++">
+	int LocateElem(SL &amp;L, ElemType e){
+			if(!L-&gt;Length){
+					return 0;
+			}
+			for(int i = 0; i&lt; L-&gt;Length; i++){
+					if(L-&gt;data[i] == e){
+							return i+1;  // 线性表的元素是从下标为1开始计算，而数组是从下标0
+							//开始计算，此处返回元素下标时应该加上1才能对应元素在线性表中的
+							//下标
+					}
+			}
+			return 0;
+	}
+</code></pre>
+<h4 id="按序号查找">按序号查找</h4>
+<pre><code class="language-c++">	
+	ElemType GetElem(SL &amp;L,int i, ElemType e){
+			if(i == 0){
+					e = L-&gt;data[0];
+					return e;
+			}
+			if(!L-&gt;Length || i&lt;1 || i &gt; L-&gt;Length){
+					return e;
+			}
+			e = L-&gt;data[i-1];
+			return e;
+	}
+</code></pre>
+<h4 id="插入操作">插入操作</h4>
+<pre><code>		int ListInsert(SL &amp;L, int i, ElemType e)
+		{
+				if (L-&gt;Length == MaxSize)  // 线性表已满 不允许插入操作
+				{
+						return 0;
+				}
+				if (i &lt; 1 || i &gt; L-&gt;Length+1)  // 超出线性表当前范围 不允许插入操作
+				{
+						return 0;
+				}
+				for (int j = L-&gt;Length; j &gt;= i; j--)
+				{
+						L-&gt;data[j] = L-&gt;data[j - 1];
+				}
+				L-&gt;data[i - 1] = e;
+				L-&gt;Length++;
+				return 1;
+		}
+</code></pre>
+<h4 id="删除操作">删除操作</h4>
+<pre><code>int ListDelete(SL &amp;L, int i, ElemType &amp;e)
+{
+    if (L-&gt;Length == 0 || i &gt; L-&gt;Length + 1)
+    {
+        return 0;
+    }
+    e = L-&gt;data[i - 1];
+    for (int j = i - 1; j &lt; L-&gt;Length; j++)
+    {
+        L-&gt;data[j] = L-&gt;data[j + 1];
+    }
+    L-&gt;Length--;
+    return 1;
+}
+</code></pre>
+<h1 id="2链表">2.链表</h1>
+<blockquote>
+<p>由于顺序表的插入和删除操作需要移动大量的元素，影响运行效率，线性表的链式结构存储时不需要逻辑上相邻的两个元素在物理位置上也相邻。</p>
+</blockquote>
+<h3 id="1单链表的数据结构">1.单链表的数据结构</h3>
+<pre><code class="language-c++">	typedef struct LNode *LinkList;
+	struct LNode {
+			ElemType data;
+			LNode *next;
+	};
+	typedef LinkList List;
+</code></pre>
+<ol start="2">
+<li>单链表的常用操作</li>
+</ol>
+<h4 id="创建单链表">创建单链表</h4>
+<ol>
+<li>头插法创建</li>
+</ol>
+<pre><code>// 头插法
+List HeadInsert(List &amp;L)
+{
+    List p, s; // p为头指针
+    int n = 20, i = 1;
+    p = (List)malloc(sizeof(struct LNode));
+    p = L;
+    p-&gt;next = NULL; // 初始为空表
+    // scanf(&quot;%d&quot;,&amp;n);
+    while (i &lt; n)
+    {
+        s = (List)malloc(sizeof(struct LNode));
+        s-&gt;data = i;
+        s-&gt;next = p-&gt;next;
+        p-&gt;next = s;
+        i++;
+    }
+    return p;
+}
+</code></pre>
+<ol start="2">
+<li>尾插法</li>
+</ol>
+<pre><code>//  尾插法
+List TailInsert(List &amp;L)
+{
+    List p, s; // 此处p为尾指针
+    int n = 10, i = 1;
+    p = (List)malloc(sizeof(struct LNode));
+    p = L;
+    // scanf(&quot;%d&quot;,&amp;n);
+    while (i &lt; n)
+    {
+        s = (List)malloc(sizeof(struct LNode));
+        s-&gt;data = i;
+        p-&gt;next = s;
+        p = s;
+        i++;
+    }
+    p-&gt;next = NULL; // 尾节点指针置空
+    return L;
+}
+</code></pre>
+<h4 id="按值查找-2">按值查找</h4>
+<pre><code class="language-c">
+	List LocateElem(List &amp;L, ElemType e){
+			List p = (List)malloc(sizeof(struct LNode));
+			p = L;
+			while(p &amp;&amp; p-&gt;data != e){
+					p = p-&gt;next;
+			}
+			return p;
+	}
+
+</code></pre>
+<h4 id="按序号查找-2">按序号查找</h4>
+<blockquote>
+<p>返回目标节点指针</p>
+</blockquote>
+<pre><code>List GetElem(List &amp;L, int i)
+{
+    LNode *p = (List)malloc(sizeof(struct LNode));
+    p = L-&gt;next; // 头节点指针赋值给p
+    int j = 1;
+    if (i == 0)
+    {
+        return p;
+    }
+    if (i &lt; 1)
+    {
+        return NULL; // 若i 小于1且不为0，则i无效，返回NULL；
+    }
+    while (p &amp;&amp; j &lt; i)
+    {
+        j++;
+        p = p-&gt;next;
+    }
+    return p;
+}
+</code></pre>
+<h4 id="插入元素">插入元素</h4>
+<blockquote>
+<p>插入元素只需要修改指针指向即可</p>
+</blockquote>
+<pre><code>List ListInsert(List &amp;L, int i, ElemType e)
+{
+    List p, s;
+    s = (List)malloc(sizeof(struct LNode));
+    s-&gt;data = e;
+    if (i == 0 || i == 1)
+    {
+        p = L;
+    }
+    else if (i &lt; 1)
+    {
+        return NULL;
+    }
+    else
+    {
+        p = GetElem(L, i - 1);
+    }
+    s-&gt;next = p-&gt;next;
+    p-&gt;next = s;
+    return s;
+}
+</code></pre>
+<blockquote>
+<p>tip:如果已知当前元素的指针，对于前插操作，链表需要遍历整个链表，此时的时间复杂度为O(n),如果换个思路，可以将元素插入目标位置之后，然后将前后两元素内部的数据进行互换同样可以完成目标✅，而此时的时间复杂度为O(1)</p>
+</blockquote>
+<h4 id="删除元素">删除元素</h4>
+<pre><code>List ListDelete(List &amp;L, int i)
+{
+    List p, s;
+    s = (List)malloc(sizeof(struct LNode));
+    if (i == 0 || i == 1)
+    {
+        p = L;
+    }
+    else if (i &lt; 1)
+    {
+        return NULL;
+    }
+    else
+    {
+        p = GetElem(L, i - 1);
+    }
+    s = p-&gt;next;
+    p-&gt;next = s-&gt;next;
+    free(s);
+}
+</code></pre>
+<p>线性表除了可以用顺序表、单链表之外还有更加方便各种操作的<strong>双链表</strong>、<strong>循环链表</strong>、<strong>循环单链表</strong>、<strong>循环双链表</strong>、<strong>静态链表</strong>等等。总之线性表是基础、超级重要啊啊啊！！！</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#1%E9%A1%BA%E5%BA%8F%E8%A1%A8">1.顺序表</a><br>
+*
+<ul>
+<li><a href="#1-%E9%A1%BA%E5%BA%8F%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">1. 顺序表的数据结构</a></li>
+<li><a href="#2-%E9%A1%BA%E5%BA%8F%E8%A1%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C">2.    顺序表的常用操作</a>
+<ul>
+<li><a href="#%E6%8C%89%E5%80%BC%E6%9F%A5%E6%89%BE">按值查找</a></li>
+<li><a href="#%E6%8C%89%E5%BA%8F%E5%8F%B7%E6%9F%A5%E6%89%BE">按序号查找</a></li>
+<li><a href="#%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C">插入操作</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C">删除操作</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#2%E9%93%BE%E8%A1%A8">2.链表</a><br>
+*
+<ul>
+<li><a href="#1%E5%8D%95%E9%93%BE%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">1.单链表的数据结构</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8">创建单链表</a></li>
+<li><a href="#%E6%8C%89%E5%80%BC%E6%9F%A5%E6%89%BE-2">按值查找</a></li>
+<li><a href="#%E6%8C%89%E5%BA%8F%E5%8F%B7%E6%9F%A5%E6%89%BE-2">按序号查找</a></li>
+<li><a href="#%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A0">插入元素</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0">删除元素</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/gty215615//post/webpack-yin-ru-di-san-fang-bao">
+              <h3 class="post-title">
+                webpack引入第三方包
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/gty215615//atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,8 +1,8 @@
 <html>
   <head>
-  <meta charset="utf-8" />
+    <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Gridea | Gridea</title>
+<title>webpack引入第三方包 | Gridea</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://github.com/gty215615//favicon.ico?v=1574074713743">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -70,47 +70,83 @@
   </div>
 </div>
 
-        <div class="current-tag-container">
-            <h2 class="title">
-                标签：# Gridea
-            </h2> 
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              webpack引入第三方包
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-11-08
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+                <a href="https://github.com/gty215615//tag/AcOSGXiuyE" class="post-tag">
+                  # webpack
+                </a>
+              
+                <a href="https://github.com/gty215615//tag/LlfvFbBUj-" class="post-tag">
+                  # 自动化工具
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://github.com/gty215615//post-images/webpack-yin-ru-di-san-fang-bao.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <blockquote>
+<p>使用webpack引入第三方包，可以使用webpack内部自带的插件ProvidePlugin来实现</p>
+</blockquote>
+<!-- more -->
+<h3 id="1使用webpackprovideplugin来实现">1.使用webpack.ProvidePlugin来实现</h3>
+<p>webpack.ProvidePlugin会将引入的第三方包加载到每一个模块内，所以当此时调用wendow.$时会出现undefined，只需要在webpack.config.js文件中引入webpack再在plugins中添加即可</p>
+<pre><code class="language-javascript">const webpack = require(&quot;webpack&quot;);
+	module.exports = {
+    ...
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        })
+    ],
+		  ...
+}
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1%E4%BD%BF%E7%94%A8webpackprovideplugin%E6%9D%A5%E5%AE%9E%E7%8E%B0">1.使用webpack.ProvidePlugin来实现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
         </div>
-        <div class="post-container">
-  
-    <article class="post">
-      <a href="https://github.com/gty215615//post/hello-gridea">
-        <h2 class="post-title">Hello Gridea</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2018-12-12
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-          <a href="https://github.com/gty215615//tag/iYn9vvN1q" class="post-tag">
-            # Gridea
-          </a>
-        
-      </div>
-      
-        <a href="https://github.com/gty215615//post/hello-gridea" class="post-feature-image" style="background-image: url('https://github.com/gty215615//post-images/hello-gridea.png')">
-        </a>
-      
-      <div class="post-abstract">
-        <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
 
-      </div>
-    </article>
-  
-</div>
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/gty215615//post/hello-gridea">
+              <h3 class="post-title">
+                Hello Gridea
+              </h3>
+            </a>
+          </div>
+        
 
-        <div class="pagination-container">
-  
-  
-</div>
+        
 
         <div class="site-footer">
   Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 

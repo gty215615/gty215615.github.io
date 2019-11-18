@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://github.com/gty215615/</id>
     <title>Gridea</title>
-    <updated>2019-11-18T10:53:16.739Z</updated>
+    <updated>2019-11-18T10:58:38.372Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://github.com/gty215615/"/>
     <link rel="self" href="https://github.com/gty215615//atom.xml"/>
@@ -10,6 +10,606 @@
     <logo>https://github.com/gty215615//images/avatar.png</logo>
     <icon>https://github.com/gty215615//favicon.ico</icon>
     <rights>All rights reserved 2019, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[从零开始学数据结构之队列（二）]]></title>
+        <id>https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-zhi-dui-lie-er</id>
+        <link href="https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-zhi-dui-lie-er">
+        </link>
+        <updated>2019-11-18T10:04:57.000Z</updated>
+        <summary type="html"><![CDATA[<p>之前学习了队列的顺序存储结构的代码实现，以及循环队列的实现，队列还可以使用链式存储结构来实现，并且链式存储的队列不会出现“溢出”的现象。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>之前学习了队列的顺序存储结构的代码实现，以及循环队列的实现，队列还可以使用链式存储结构来实现，并且链式存储的队列不会出现“溢出”的现象。</p>
+<!-- more -->
+<ol>
+<li>
+<p>数据结构如下</p>
+<pre><code> ```c++
+     typedef int ElemType;
+
+     typedef struct LinkNode *LNode;
+     struct LinkNode
+     {
+         ElemType data;
+         struct LinkNode *next;
+     };
+
+     typedef struct LinkQueue *LQueue;
+     struct LinkQueue
+     {
+         LinkNode *front, *rear;
+     };
+
+ ```
+</code></pre>
+</li>
+<li>
+<p>具体代码实现</p>
+<ol>
+<li>
+<p>队列初始化</p>
+<pre><code class="language-c++">            void InitQueue(LQueue &amp;q)
+            {
+                LNode L = (LNode)malloc(sizeof(LNode));
+                L-&gt;next = NULL;
+                q-&gt;front = q-&gt;rear = L;
+            }
+</code></pre>
+</li>
+</ol>
+</li>
+<li>
+<p>判断队列是否为空</p>
+</li>
+</ol>
+<pre><code class="language-c++">           bool QueueEmpty(LQueue &amp;q)
+            {
+                if (q-&gt;front == q-&gt;rear)
+                {
+                    return true;
+                }
+                return false;
+            }
+</code></pre>
+<ol start="3">
+<li>入队</li>
+</ol>
+<pre><code class="language-c++">            bool EnQueue(LQueue &amp;q, ElemType e)
+                {
+                    LNode L = (LNode)malloc(sizeof(LNode));
+                    L-&gt;data = e;
+                    L-&gt;next = q-&gt;rear-&gt;next;
+                    q-&gt;rear-&gt;next = L;
+                    q-&gt;rear = L;
+                    return true;
+                }
+</code></pre>
+<ol start="4">
+<li>出队</li>
+</ol>
+<pre><code class="language-c++">            bool DeQueue(LQueue &amp;q, ElemType &amp;e)
+                {
+                    if (q-&gt;front == q-&gt;rear)
+                    {
+                        return false;
+                    }
+                    LNode L = (LNode)malloc(sizeof(LNode));
+                    L = q-&gt;front-&gt;next;
+                    e = L-&gt;data;
+                    q-&gt;front-&gt;next = L-&gt;next;
+                    if (L == q-&gt;rear)
+                    {
+                        q-&gt;front = q-&gt;rear;
+                    }
+                    free(L);
+                    return true;
+                }
+</code></pre>
+<ol start="5">
+<li>读取队头元素</li>
+</ol>
+<pre><code class="language-c++">            bool GetHead(LQueue &amp;q, ElemType &amp;e)
+                {
+                    bool flag = QueueEmpty(q);
+                    if (flag)
+                    {
+                        return false;
+                    }
+                    e = q-&gt;front-&gt;data;
+                    return true;
+                }
+</code></pre>
+<p>队列的链式存储适用于数组元素变动比较大的情形下，而且不存在队列满而产生的数据溢出的情况。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[从零开始学数据结构之队列（一）]]></title>
+        <id>https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-3dui-lie</id>
+        <link href="https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-3dui-lie">
+        </link>
+        <updated>2019-11-17T09:16:04.000Z</updated>
+        <summary type="html"><![CDATA[<p>队列也是一种操作受限制的线性表，它拥有队首与队尾，并规定只能从队首删除元素（出队），从队尾添加元素（入队），队列的特点就是先进先出(First In First Out)。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>队列也是一种操作受限制的线性表，它拥有队首与队尾，并规定只能从队首删除元素（出队），从队尾添加元素（入队），队列的特点就是先进先出(First In First Out)。</p>
+<!-- more -->
+<ol>
+<li>首先是队列的顺序存储结构，其数据结构如下<pre><code class="language-c++">     #define MaxSize 50
+     typedef int ElemType;
+     typedef struct
+     {
+         ElemType data[MaxSize];
+         int front, // 队头 允许出队
+             rear;  // 队尾 允许入队
+     } SqQueue;
+</code></pre>
+</li>
+<li>其次是队列的常用操作：</li>
+</ol>
+<blockquote>
+<p>同栈的操作一样，先判断一下队列的一些临界状态：</p>
+</blockquote>
+<ul>
+<li>队列为空：则可以通过判断队列的首尾指针来确定，即q.front == q.rear，此时不允许出队。</li>
+<li>队列已满：则通过判断队尾指针等于初始分配的最大空间，即q.rear == MaxSize（真的可以吗？🤔），此时不允许入队。</li>
+</ul>
+<p>具体代码实现如下：</p>
+<ol>
+<li>队列初始化</li>
+</ol>
+<pre><code class="language-c++">            void InitQueue(SqQueue &amp;q)
+                {
+                    q.front = q.rear = 0;
+                }
+</code></pre>
+<ol start="2">
+<li>判断队列是否为空</li>
+</ol>
+<pre><code class="language-c++">            bool QueueEmpty(SqQueue &amp;q)
+            {
+                if (q.front == q.rear)
+                {
+                    return true;
+                }
+                return false;
+            }
+</code></pre>
+<ol start="3">
+<li>入队</li>
+</ol>
+<pre><code class="language-c++">            bool EnQueue(SqQueue &amp;q, ElemType e)
+                {
+                    if (q.rear == MaxSize)
+                    {
+                        return false;
+                    }
+                    q.data[q.rear++] = e;
+                    return true;
+                }
+</code></pre>
+<ol start="4">
+<li>出队</li>
+</ol>
+<pre><code class="language-c++">            bool DeQueue(SqQueue &amp;q, ElemType &amp;e)
+            {
+                if (q.front == q.rear)
+                {
+                    return false;
+                }
+                e = q.data[q.front--];
+                return true;
+            }
+</code></pre>
+<ol start="5">
+<li>读取队头元素</li>
+</ol>
+<pre><code class="language-c++">            bool GetHead(SqQueue &amp;q, ElemType &amp;e)
+                {
+                    bool flag = QueueEmpty(q);
+                    if (flag)
+                    {
+                        return false;
+                    }
+                    e = q.data[q.front];
+                    return true;
+                }
+</code></pre>
+<p>以上看似已经完成了队列的顺序存储，但此时又一个严重的问题就是，当队尾指针q.rear == MaxSize时，再执行出队操作，出队若干元素之后，再执行入队操作时会出现“上溢出”，明明数组data还有闲置的空间，这是一种“假溢出”的现象。那么现在开始，把上面那个data数组想象成一个圆环，将数组的首尾相接形成一个封闭的回路，那么就得到一个循环队列。在循环队列中解决这个问题就方便很多了，有很多的方法🤗，比如说</p>
+<ol>
+<li>在队列中加入一个表示当前存储的元素长度的字段size，</li>
+<li>或者加入一个记录当前操作的字段flag。当flag为1时表示最后一次执行的时出队操作，此时判断q.front == q.rear，则为队空状态；为0时表示最后一次执行的是入队操作，此时判断q.front == q.rear，则为队满的状态。</li>
+<li>还有一种方法就是牺牲一个存储空间，当q.front == q.rear+1时，就表示队列已满，队列为空时则仍是q.front == q.rear；不过之前临界的判断规则需要修改一下😹：</li>
+</ol>
+<ul>
+<li>队列已满：q.front = (q.rear+1)%MaxSize;</li>
+<li>队列元素的个数：count = (q.rear-q.front+MaxSize)%MaxSize;</li>
+</ul>
+<p>第三种方法的入队、出队具体代码实现如下：</p>
+<pre><code class="language-c++">    // 入队
+
+    bool EnQueue(SqQueue &amp;q, ElemType e)
+    {
+        if ((q.rear+1)%MaxSize == q.front) // 此时表示队列已满
+        {
+            return false;
+        }
+        q.data[q.rear] = e;
+        q.rear = (q.rear+1)%MaxSize;
+        return false;
+    }
+
+    // 出队
+
+    bool DeQueue(SqQueue &amp;q, ElemType &amp;e)
+    {
+        if (q.front == q.rear)
+        {
+            return false;
+        }
+        e = q.data[q.front];
+        q.front  = (q.front+1)%MaxSize;
+        return true;
+    }
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[从零开始学数据结构之栈]]></title>
+        <id>https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-2-zhan</id>
+        <link href="https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-2-zhan">
+        </link>
+        <updated>2019-11-13T12:51:22.000Z</updated>
+        <summary type="html"><![CDATA[<p>栈是一种只允许在一端进行插入和删除的线性表，栈也是一种线性表,栈的特点是后进先出(Last In First Out)。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>栈是一种只允许在一端进行插入和删除的线性表，栈也是一种线性表,栈的特点是后进先出(Last In First Out)。</p>
+<!-- more -->
+<h2 id="顺序栈">顺序栈</h2>
+<h3 id="首先来确定栈的数据结构">首先来确定栈的数据结构</h3>
+<pre><code class="language-c++">#define MaxSize 50
+typedef int ElemType;
+struct SqStack{
+    ElemType data[MaxSize];  
+    int top; // 栈顶指针，初始化时会设置为-1.
+} ;
+</code></pre>
+<p>然后来确定栈的一些特殊临届状态值：</p>
+<ol>
+<li>栈空状态：约定当栈顶指针s.top == -1 时，表示此时为空栈，不允许再进行出栈操作。</li>
+<li>栈满状态：当栈顶指针s.top == MaxSize-1 时，表示此时栈已满，不允许再进行入栈操作。</li>
+</ol>
+<p>然后就可以来进行实现常用的对于栈的操作</p>
+<h4 id="初始化空栈">初始化空栈</h4>
+<pre><code class="language-c++">    void InitStack(SqStack &amp;s){
+        s.top = -1;
+    }
+</code></pre>
+<h4 id="判断是否为空栈">判断是否为空栈</h4>
+<pre><code class="language-c++">    bool StackEmpty(SqStack &amp;s){
+        if(s.top == -1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</code></pre>
+<h4 id="入栈操作">入栈操作</h4>
+<blockquote>
+<p>入栈时将栈顶指针s.top+1,再将新元素入栈。</p>
+</blockquote>
+<pre><code class="language-c++">    bool Push(SqStack &amp;s,ElemType x){
+        if(s.top == MaxSize-1){
+            return false;
+        }
+        s.data[++s.top]=x;
+        return true;
+    }
+</code></pre>
+<h4 id="出栈操作">出栈操作</h4>
+<blockquote>
+<p>出栈时将元素出栈后再将栈顶指针减去一。</p>
+</blockquote>
+<pre><code class="language-c++">    bool Pop(SqStack &amp;s,ElemType &amp;x){
+        if(s.top == -1){
+            return false;
+        }
+        x = s.data[s.top--];
+        return true;
+    }
+</code></pre>
+<h4 id="获取栈顶元素">获取栈顶元素</h4>
+<pre><code class="language-c++">    bool GetTop(SqStack &amp;s,ElemType &amp;x){
+        if(s.top == -1){
+            return false;
+        }
+        x = s.data[s.top]
+        return true;
+    }
+</code></pre>
+<p>除此之外还有共享栈，利用栈底不变的特性，将两个栈放在同一个一维数据空间内部以达到共享空间的目的。还有栈的链式存储结构与线性表的链式存储结构类似，只是具体实现方面有所不同。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[从零开始学数据结构之线性表]]></title>
+        <id>https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-1-xian-xing-biao</id>
+        <link href="https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-1-xian-xing-biao">
+        </link>
+        <updated>2019-11-10T12:50:01.000Z</updated>
+        <summary type="html"><![CDATA[<p>线性表是一种线性存储结构的，除了首位元素，每一个元素都有一个直接前驱；除了末尾元素，每一个元素都有一个直接后继。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>线性表是一种线性存储结构的，除了首位元素，每一个元素都有一个直接前驱；除了末尾元素，每一个元素都有一个直接后继。</p>
+<!-- more -->
+<pre><code> // 对于线性表的常用操作如下
+	 InitList(&amp;L)  初始化线性表
+	 Lenght(&amp;L) 返回表长
+	 LocateElem(&amp;L,e) 按值来查找元素，在表L中查找指定元素
+	 GetElem(&amp;L,i) 按序号查找元素，在表L查找指定位置的元素
+	 ListInsert(&amp;L,i,e) 将元素e插如表L的指定位置i处
+	 ListDelete(&amp;L,i,&amp;e) 将表L的第i个元素删除并用e返回删除元素的值
+	 PrintfList(&amp;L) 打印线性表L
+	 Empty(&amp;L) 判断线性表L是否为空，空则返回true，否则返回false
+	 DestoryList(&amp;L) 销毁线性表L
+</code></pre>
+<h1 id="1顺序表">1.顺序表</h1>
+<blockquote>
+<p>顺序表是一种顺序存储结构的线性表，顺序表的逻辑相邻的两个元素在存储在物理结构上也相邻。</p>
+</blockquote>
+<h3 id="1-顺序表的数据结构">1. 顺序表的数据结构</h3>
+<pre><code class="language-c++">		#define MaxSize 50
+		typedef struct sq *SqList;
+		struct sq {
+				ElemType data[MaxSize];
+				int Length;
+		};
+		typedef SqList SL;
+</code></pre>
+<h3 id="2-顺序表的常用操作">2.    顺序表的常用操作</h3>
+<h4 id="按值查找">按值查找</h4>
+<pre><code class="language-c++">
+	int LocateElem(SL &amp;L, ElemType e){
+			if(!L-&gt;Length){
+					return 0;
+			}
+			for(int i = 0; i&lt; L-&gt;Length; i++){
+					if(L-&gt;data[i] == e){
+							return i+1;  // 线性表的元素是从下标为1开始计算，而数组是从下标0
+							//开始计算，此处返回元素下标时应该加上1才能对应元素在线性表中的
+							//下标
+					}
+			}
+			return 0;
+	}
+</code></pre>
+<h4 id="按序号查找">按序号查找</h4>
+<pre><code class="language-c++">	
+	ElemType GetElem(SL &amp;L,int i, ElemType e){
+			if(i == 0){
+					e = L-&gt;data[0];
+					return e;
+			}
+			if(!L-&gt;Length || i&lt;1 || i &gt; L-&gt;Length){
+					return e;
+			}
+			e = L-&gt;data[i-1];
+			return e;
+	}
+</code></pre>
+<h4 id="插入操作">插入操作</h4>
+<pre><code>		int ListInsert(SL &amp;L, int i, ElemType e)
+		{
+				if (L-&gt;Length == MaxSize)  // 线性表已满 不允许插入操作
+				{
+						return 0;
+				}
+				if (i &lt; 1 || i &gt; L-&gt;Length+1)  // 超出线性表当前范围 不允许插入操作
+				{
+						return 0;
+				}
+				for (int j = L-&gt;Length; j &gt;= i; j--)
+				{
+						L-&gt;data[j] = L-&gt;data[j - 1];
+				}
+				L-&gt;data[i - 1] = e;
+				L-&gt;Length++;
+				return 1;
+		}
+</code></pre>
+<h4 id="删除操作">删除操作</h4>
+<pre><code>int ListDelete(SL &amp;L, int i, ElemType &amp;e)
+{
+    if (L-&gt;Length == 0 || i &gt; L-&gt;Length + 1)
+    {
+        return 0;
+    }
+    e = L-&gt;data[i - 1];
+    for (int j = i - 1; j &lt; L-&gt;Length; j++)
+    {
+        L-&gt;data[j] = L-&gt;data[j + 1];
+    }
+    L-&gt;Length--;
+    return 1;
+}
+</code></pre>
+<h1 id="2链表">2.链表</h1>
+<blockquote>
+<p>由于顺序表的插入和删除操作需要移动大量的元素，影响运行效率，线性表的链式结构存储时不需要逻辑上相邻的两个元素在物理位置上也相邻。</p>
+</blockquote>
+<h3 id="1单链表的数据结构">1.单链表的数据结构</h3>
+<pre><code class="language-c++">	typedef struct LNode *LinkList;
+	struct LNode {
+			ElemType data;
+			LNode *next;
+	};
+	typedef LinkList List;
+</code></pre>
+<ol start="2">
+<li>单链表的常用操作</li>
+</ol>
+<h4 id="创建单链表">创建单链表</h4>
+<ol>
+<li>头插法创建</li>
+</ol>
+<pre><code>// 头插法
+List HeadInsert(List &amp;L)
+{
+    List p, s; // p为头指针
+    int n = 20, i = 1;
+    p = (List)malloc(sizeof(struct LNode));
+    p = L;
+    p-&gt;next = NULL; // 初始为空表
+    // scanf(&quot;%d&quot;,&amp;n);
+    while (i &lt; n)
+    {
+        s = (List)malloc(sizeof(struct LNode));
+        s-&gt;data = i;
+        s-&gt;next = p-&gt;next;
+        p-&gt;next = s;
+        i++;
+    }
+    return p;
+}
+</code></pre>
+<ol start="2">
+<li>尾插法</li>
+</ol>
+<pre><code>//  尾插法
+List TailInsert(List &amp;L)
+{
+    List p, s; // 此处p为尾指针
+    int n = 10, i = 1;
+    p = (List)malloc(sizeof(struct LNode));
+    p = L;
+    // scanf(&quot;%d&quot;,&amp;n);
+    while (i &lt; n)
+    {
+        s = (List)malloc(sizeof(struct LNode));
+        s-&gt;data = i;
+        p-&gt;next = s;
+        p = s;
+        i++;
+    }
+    p-&gt;next = NULL; // 尾节点指针置空
+    return L;
+}
+</code></pre>
+<h4 id="按值查找-2">按值查找</h4>
+<pre><code class="language-c">
+	List LocateElem(List &amp;L, ElemType e){
+			List p = (List)malloc(sizeof(struct LNode));
+			p = L;
+			while(p &amp;&amp; p-&gt;data != e){
+					p = p-&gt;next;
+			}
+			return p;
+	}
+
+</code></pre>
+<h4 id="按序号查找-2">按序号查找</h4>
+<blockquote>
+<p>返回目标节点指针</p>
+</blockquote>
+<pre><code>List GetElem(List &amp;L, int i)
+{
+    LNode *p = (List)malloc(sizeof(struct LNode));
+    p = L-&gt;next; // 头节点指针赋值给p
+    int j = 1;
+    if (i == 0)
+    {
+        return p;
+    }
+    if (i &lt; 1)
+    {
+        return NULL; // 若i 小于1且不为0，则i无效，返回NULL；
+    }
+    while (p &amp;&amp; j &lt; i)
+    {
+        j++;
+        p = p-&gt;next;
+    }
+    return p;
+}
+</code></pre>
+<h4 id="插入元素">插入元素</h4>
+<blockquote>
+<p>插入元素只需要修改指针指向即可</p>
+</blockquote>
+<pre><code>List ListInsert(List &amp;L, int i, ElemType e)
+{
+    List p, s;
+    s = (List)malloc(sizeof(struct LNode));
+    s-&gt;data = e;
+    if (i == 0 || i == 1)
+    {
+        p = L;
+    }
+    else if (i &lt; 1)
+    {
+        return NULL;
+    }
+    else
+    {
+        p = GetElem(L, i - 1);
+    }
+    s-&gt;next = p-&gt;next;
+    p-&gt;next = s;
+    return s;
+}
+</code></pre>
+<blockquote>
+<p>tip:如果已知当前元素的指针，对于前插操作，链表需要遍历整个链表，此时的时间复杂度为O(n),如果换个思路，可以将元素插入目标位置之后，然后将前后两元素内部的数据进行互换同样可以完成目标✅，而此时的时间复杂度为O(1)</p>
+</blockquote>
+<h4 id="删除元素">删除元素</h4>
+<pre><code>List ListDelete(List &amp;L, int i)
+{
+    List p, s;
+    s = (List)malloc(sizeof(struct LNode));
+    if (i == 0 || i == 1)
+    {
+        p = L;
+    }
+    else if (i &lt; 1)
+    {
+        return NULL;
+    }
+    else
+    {
+        p = GetElem(L, i - 1);
+    }
+    s = p-&gt;next;
+    p-&gt;next = s-&gt;next;
+    free(s);
+}
+</code></pre>
+<p>线性表除了可以用顺序表、单链表之外还有更加方便各种操作的<strong>双链表</strong>、<strong>循环链表</strong>、<strong>循环单链表</strong>、<strong>循环双链表</strong>、<strong>静态链表</strong>等等。总之线性表是基础、超级重要啊啊啊！！！</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[webpack引入第三方包]]></title>
+        <id>https://github.com/gty215615//post/webpack-yin-ru-di-san-fang-bao</id>
+        <link href="https://github.com/gty215615//post/webpack-yin-ru-di-san-fang-bao">
+        </link>
+        <updated>2019-11-08T11:29:29.000Z</updated>
+        <summary type="html"><![CDATA[<blockquote>
+<p>使用webpack引入第三方包，可以使用webpack内部自带的插件ProvidePlugin来实现</p>
+</blockquote>
+]]></summary>
+        <content type="html"><![CDATA[<blockquote>
+<p>使用webpack引入第三方包，可以使用webpack内部自带的插件ProvidePlugin来实现</p>
+</blockquote>
+<!-- more -->
+<h3 id="1使用webpackprovideplugin来实现">1.使用webpack.ProvidePlugin来实现</h3>
+<p>webpack.ProvidePlugin会将引入的第三方包加载到每一个模块内，所以当此时调用wendow.$时会出现undefined，只需要在webpack.config.js文件中引入webpack再在plugins中添加即可</p>
+<pre><code class="language-javascript">const webpack = require(&quot;webpack&quot;);
+	module.exports = {
+    ...
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        })
+    ],
+		  ...
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://github.com/gty215615//post/hello-gridea</id>

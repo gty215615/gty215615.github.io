@@ -1,0 +1,251 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>从零开始学数据结构之栈 | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/gty215615//favicon.ico?v=1574074713743">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/gty215615//styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/gty215615/">
+  <img class="avatar" src="https://github.com/gty215615//images/avatar.png?v=1574074713743" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              从零开始学数据结构之栈
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-11-13
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://github.com/gty215615//tag/4sbw5IoQL" class="post-tag">
+                  # 数据结构
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://tva4.sinaimg.cn/large/0072Vf1pgy1foxlhbqhasj31hc0u0qjw.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>栈是一种只允许在一端进行插入和删除的线性表，栈也是一种线性表,栈的特点是后进先出(Last In First Out)。</p>
+<!-- more -->
+<h2 id="顺序栈">顺序栈</h2>
+<h3 id="首先来确定栈的数据结构">首先来确定栈的数据结构</h3>
+<pre><code class="language-c++">#define MaxSize 50
+typedef int ElemType;
+struct SqStack{
+    ElemType data[MaxSize];  
+    int top; // 栈顶指针，初始化时会设置为-1.
+} ;
+</code></pre>
+<p>然后来确定栈的一些特殊临届状态值：</p>
+<ol>
+<li>栈空状态：约定当栈顶指针s.top == -1 时，表示此时为空栈，不允许再进行出栈操作。</li>
+<li>栈满状态：当栈顶指针s.top == MaxSize-1 时，表示此时栈已满，不允许再进行入栈操作。</li>
+</ol>
+<p>然后就可以来进行实现常用的对于栈的操作</p>
+<h4 id="初始化空栈">初始化空栈</h4>
+<pre><code class="language-c++">    void InitStack(SqStack &amp;s){
+        s.top = -1;
+    }
+</code></pre>
+<h4 id="判断是否为空栈">判断是否为空栈</h4>
+<pre><code class="language-c++">    bool StackEmpty(SqStack &amp;s){
+        if(s.top == -1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</code></pre>
+<h4 id="入栈操作">入栈操作</h4>
+<blockquote>
+<p>入栈时将栈顶指针s.top+1,再将新元素入栈。</p>
+</blockquote>
+<pre><code class="language-c++">    bool Push(SqStack &amp;s,ElemType x){
+        if(s.top == MaxSize-1){
+            return false;
+        }
+        s.data[++s.top]=x;
+        return true;
+    }
+</code></pre>
+<h4 id="出栈操作">出栈操作</h4>
+<blockquote>
+<p>出栈时将元素出栈后再将栈顶指针减去一。</p>
+</blockquote>
+<pre><code class="language-c++">    bool Pop(SqStack &amp;s,ElemType &amp;x){
+        if(s.top == -1){
+            return false;
+        }
+        x = s.data[s.top--];
+        return true;
+    }
+</code></pre>
+<h4 id="获取栈顶元素">获取栈顶元素</h4>
+<pre><code class="language-c++">    bool GetTop(SqStack &amp;s,ElemType &amp;x){
+        if(s.top == -1){
+            return false;
+        }
+        x = s.data[s.top]
+        return true;
+    }
+</code></pre>
+<p>除此之外还有共享栈，利用栈底不变的特性，将两个栈放在同一个一维数据空间内部以达到共享空间的目的。还有栈的链式存储结构与线性表的链式存储结构类似，只是具体实现方面有所不同。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E9%A1%BA%E5%BA%8F%E6%A0%88">顺序栈</a>
+<ul>
+<li><a href="#%E9%A6%96%E5%85%88%E6%9D%A5%E7%A1%AE%E5%AE%9A%E6%A0%88%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">首先来确定栈的数据结构</a>
+<ul>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%A9%BA%E6%A0%88">初始化空栈</a></li>
+<li><a href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E4%B8%BA%E7%A9%BA%E6%A0%88">判断是否为空栈</a></li>
+<li><a href="#%E5%85%A5%E6%A0%88%E6%93%8D%E4%BD%9C">入栈操作</a></li>
+<li><a href="#%E5%87%BA%E6%A0%88%E6%93%8D%E4%BD%9C">出栈操作</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E6%A0%88%E9%A1%B6%E5%85%83%E7%B4%A0">获取栈顶元素</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-1-xian-xing-biao">
+              <h3 class="post-title">
+                从零开始学数据结构之线性表
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/gty215615//atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,287 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>从零开始学数据结构之队列（一） | Gridea</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://github.com/gty215615//favicon.ico?v=1574074713743">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/gty215615//styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/gty215615/">
+  <img class="avatar" src="https://github.com/gty215615//images/avatar.png?v=1574074713743" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              从零开始学数据结构之队列（一）
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-11-17
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://github.com/gty215615//tag/4sbw5IoQL" class="post-tag">
+                  # 数据结构
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://tva2.sinaimg.cn/large/0072Vf1pgy1foxkfbb3c7j31kw0w04ou.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>队列也是一种操作受限制的线性表，它拥有队首与队尾，并规定只能从队首删除元素（出队），从队尾添加元素（入队），队列的特点就是先进先出(First In First Out)。</p>
+<!-- more -->
+<ol>
+<li>首先是队列的顺序存储结构，其数据结构如下<pre><code class="language-c++">     #define MaxSize 50
+     typedef int ElemType;
+     typedef struct
+     {
+         ElemType data[MaxSize];
+         int front, // 队头 允许出队
+             rear;  // 队尾 允许入队
+     } SqQueue;
+</code></pre>
+</li>
+<li>其次是队列的常用操作：</li>
+</ol>
+<blockquote>
+<p>同栈的操作一样，先判断一下队列的一些临界状态：</p>
+</blockquote>
+<ul>
+<li>队列为空：则可以通过判断队列的首尾指针来确定，即q.front == q.rear，此时不允许出队。</li>
+<li>队列已满：则通过判断队尾指针等于初始分配的最大空间，即q.rear == MaxSize（真的可以吗？🤔），此时不允许入队。</li>
+</ul>
+<p>具体代码实现如下：</p>
+<ol>
+<li>队列初始化</li>
+</ol>
+<pre><code class="language-c++">            void InitQueue(SqQueue &amp;q)
+                {
+                    q.front = q.rear = 0;
+                }
+</code></pre>
+<ol start="2">
+<li>判断队列是否为空</li>
+</ol>
+<pre><code class="language-c++">            bool QueueEmpty(SqQueue &amp;q)
+            {
+                if (q.front == q.rear)
+                {
+                    return true;
+                }
+                return false;
+            }
+</code></pre>
+<ol start="3">
+<li>入队</li>
+</ol>
+<pre><code class="language-c++">            bool EnQueue(SqQueue &amp;q, ElemType e)
+                {
+                    if (q.rear == MaxSize)
+                    {
+                        return false;
+                    }
+                    q.data[q.rear++] = e;
+                    return true;
+                }
+</code></pre>
+<ol start="4">
+<li>出队</li>
+</ol>
+<pre><code class="language-c++">            bool DeQueue(SqQueue &amp;q, ElemType &amp;e)
+            {
+                if (q.front == q.rear)
+                {
+                    return false;
+                }
+                e = q.data[q.front--];
+                return true;
+            }
+</code></pre>
+<ol start="5">
+<li>读取队头元素</li>
+</ol>
+<pre><code class="language-c++">            bool GetHead(SqQueue &amp;q, ElemType &amp;e)
+                {
+                    bool flag = QueueEmpty(q);
+                    if (flag)
+                    {
+                        return false;
+                    }
+                    e = q.data[q.front];
+                    return true;
+                }
+</code></pre>
+<p>以上看似已经完成了队列的顺序存储，但此时又一个严重的问题就是，当队尾指针q.rear == MaxSize时，再执行出队操作，出队若干元素之后，再执行入队操作时会出现“上溢出”，明明数组data还有闲置的空间，这是一种“假溢出”的现象。那么现在开始，把上面那个data数组想象成一个圆环，将数组的首尾相接形成一个封闭的回路，那么就得到一个循环队列。在循环队列中解决这个问题就方便很多了，有很多的方法🤗，比如说</p>
+<ol>
+<li>在队列中加入一个表示当前存储的元素长度的字段size，</li>
+<li>或者加入一个记录当前操作的字段flag。当flag为1时表示最后一次执行的时出队操作，此时判断q.front == q.rear，则为队空状态；为0时表示最后一次执行的是入队操作，此时判断q.front == q.rear，则为队满的状态。</li>
+<li>还有一种方法就是牺牲一个存储空间，当q.front == q.rear+1时，就表示队列已满，队列为空时则仍是q.front == q.rear；不过之前临界的判断规则需要修改一下😹：</li>
+</ol>
+<ul>
+<li>队列已满：q.front = (q.rear+1)%MaxSize;</li>
+<li>队列元素的个数：count = (q.rear-q.front+MaxSize)%MaxSize;</li>
+</ul>
+<p>第三种方法的入队、出队具体代码实现如下：</p>
+<pre><code class="language-c++">    // 入队
+
+    bool EnQueue(SqQueue &amp;q, ElemType e)
+    {
+        if ((q.rear+1)%MaxSize == q.front) // 此时表示队列已满
+        {
+            return false;
+        }
+        q.data[q.rear] = e;
+        q.rear = (q.rear+1)%MaxSize;
+        return false;
+    }
+
+    // 出队
+
+    bool DeQueue(SqQueue &amp;q, ElemType &amp;e)
+    {
+        if (q.front == q.rear)
+        {
+            return false;
+        }
+        e = q.data[q.front];
+        q.front  = (q.front+1)%MaxSize;
+        return true;
+    }
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/gty215615//post/cong-ling-kai-shi-xue-shu-ju-jie-gou-2-zhan">
+              <h3 class="post-title">
+                从零开始学数据结构之栈
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/gty215615//atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
