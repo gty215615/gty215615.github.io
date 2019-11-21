@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>从零开始学数据结构之队列（二） | Gridea</title>
 <meta name="description" content="温故而知新" />
-<link rel="shortcut icon" href="http://www.guotingyan.cn/favicon.ico?v=1574075480378">
+<link rel="shortcut icon" href="http://www.guotingyan.cn/favicon.ico?v=1574346388072">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="http://www.guotingyan.cn/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="http://www.guotingyan.cn">
-  <img class="avatar" src="http://www.guotingyan.cn/images/avatar.png?v=1574075480378" alt="">
+  <img class="avatar" src="http://www.guotingyan.cn/images/avatar.png?v=1574346388072" alt="">
   </a>
   <h1 class="site-title">
     Gridea
@@ -96,47 +96,43 @@
                 <p>之前学习了队列的顺序存储结构的代码实现，以及循环队列的实现，队列还可以使用链式存储结构来实现，并且链式存储的队列不会出现“溢出”的现象。</p>
 <!-- more -->
 <ol>
-<li>
-<p>数据结构如下</p>
-<pre><code> ```c++
-     typedef int ElemType;
+<li>数据结构如下</li>
+</ol>
+<pre><code class="language-c++">        typedef int ElemType;
 
-     typedef struct LinkNode *LNode;
-     struct LinkNode
-     {
-         ElemType data;
-         struct LinkNode *next;
-     };
+            typedef struct LinkNode *LNode;
+            struct LinkNode
+            {
+                ElemType data;
+                struct LinkNode *next;
+            };
 
-     typedef struct LinkQueue *LQueue;
-     struct LinkQueue
-     {
-         LinkNode *front, *rear;
-     };
+            typedef struct LinkQueue *LQueue;
+            struct LinkQueue
+            {
+                LinkNode *front, *rear;
+            };         
 
- ```
 </code></pre>
-</li>
+<ol start="2">
 <li>
 <p>具体代码实现</p>
 <ol>
-<li>
-<p>队列初始化</p>
-<pre><code class="language-c++">            void InitQueue(LQueue &amp;q)
+<li>队列初始化</li>
+</ol>
+</li>
+</ol>
+<pre><code class="language-c++">        void InitQueue(LQueue &amp;q)
             {
                 LNode L = (LNode)malloc(sizeof(LNode));
                 L-&gt;next = NULL;
                 q-&gt;front = q-&gt;rear = L;
             }
 </code></pre>
-</li>
+<ol start="2">
+<li>判断队列是否为空</li>
 </ol>
-</li>
-<li>
-<p>判断队列是否为空</p>
-</li>
-</ol>
-<pre><code class="language-c++">           bool QueueEmpty(LQueue &amp;q)
+<pre><code class="language-c++">        bool QueueEmpty(LQueue &amp;q)
             {
                 if (q-&gt;front == q-&gt;rear)
                 {
@@ -148,7 +144,7 @@
 <ol start="3">
 <li>入队</li>
 </ol>
-<pre><code class="language-c++">            bool EnQueue(LQueue &amp;q, ElemType e)
+<pre><code class="language-c++">        bool EnQueue(LQueue &amp;q, ElemType e)
                 {
                     LNode L = (LNode)malloc(sizeof(LNode));
                     L-&gt;data = e;
@@ -161,7 +157,7 @@
 <ol start="4">
 <li>出队</li>
 </ol>
-<pre><code class="language-c++">            bool DeQueue(LQueue &amp;q, ElemType &amp;e)
+<pre><code class="language-c++">        bool DeQueue(LQueue &amp;q, ElemType &amp;e)
                 {
                     if (q-&gt;front == q-&gt;rear)
                     {

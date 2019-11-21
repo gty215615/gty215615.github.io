@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>从零开始学数据结构之队列（一） | Gridea</title>
 <meta name="description" content="温故而知新" />
-<link rel="shortcut icon" href="http://www.guotingyan.cn/favicon.ico?v=1574075480378">
+<link rel="shortcut icon" href="http://www.guotingyan.cn/favicon.ico?v=1574346388072">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="http://www.guotingyan.cn/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="http://www.guotingyan.cn">
-  <img class="avatar" src="http://www.guotingyan.cn/images/avatar.png?v=1574075480378" alt="">
+  <img class="avatar" src="http://www.guotingyan.cn/images/avatar.png?v=1574346388072" alt="">
   </a>
   <h1 class="site-title">
     Gridea
@@ -96,16 +96,18 @@
                 <p>队列也是一种操作受限制的线性表，它拥有队首与队尾，并规定只能从队首删除元素（出队），从队尾添加元素（入队），队列的特点就是先进先出(First In First Out)。</p>
 <!-- more -->
 <ol>
-<li>首先是队列的顺序存储结构，其数据结构如下<pre><code class="language-c++">     #define MaxSize 50
-     typedef int ElemType;
-     typedef struct
-     {
-         ElemType data[MaxSize];
-         int front, // 队头 允许出队
-             rear;  // 队尾 允许入队
-     } SqQueue;
+<li>首先是队列的顺序存储结构，其数据结构如下</li>
+</ol>
+<pre><code class="language-c++">        #define MaxSize 50
+        typedef int ElemType;
+        typedef struct
+        {
+            ElemType data[MaxSize];
+            int front, // 队头 允许出队
+                rear;  // 队尾 允许入队
+        } SqQueue;
 </code></pre>
-</li>
+<ol start="2">
 <li>其次是队列的常用操作：</li>
 </ol>
 <blockquote>
