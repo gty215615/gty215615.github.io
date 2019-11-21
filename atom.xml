@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://www.guotingyan.cn</id>
-    <title>Gridea</title>
-    <updated>2019-11-21T14:29:26.657Z</updated>
+    <title>醉墨</title>
+    <updated>2019-11-21T14:30:42.265Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://www.guotingyan.cn"/>
     <link rel="self" href="http://www.guotingyan.cn/atom.xml"/>
     <subtitle>温故而知新</subtitle>
     <logo>http://www.guotingyan.cn/images/avatar.png</logo>
     <icon>http://www.guotingyan.cn/favicon.ico</icon>
-    <rights>All rights reserved 2019, Gridea</rights>
+    <rights>All rights reserved 2019, 醉墨</rights>
     <entry>
         <title type="html"><![CDATA[从零开始学数据结构之树（一）]]></title>
         <id>http://www.guotingyan.cn/post/cong-ling-kai-shi-xue-shu-ju-jie-gou-zhi-shu</id>
