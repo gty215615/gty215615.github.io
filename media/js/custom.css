@@ -1,0 +1,7 @@
+code[class*=language-], pre[class*=language-] {
+    text-shadow:none;
+}
+
+.language-css .token.string, .style .token.string, .token.entity, .token.operator, .token.url{
+    background: none;
+}

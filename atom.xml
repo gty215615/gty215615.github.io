@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://gty215615.github.io</id>
+    <title>guoTY的博客</title>
+    <updated>2022-08-28T10:02:03.288Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://gty215615.github.io"/>
+    <link rel="self" href="https://gty215615.github.io/atom.xml"/>
+    <subtitle>分享代码,记录学习过程</subtitle>
+    <logo>https://gty215615.github.io/images/avatar.png</logo>
+    <icon>https://gty215615.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2022, guoTY的博客</rights>
+    <entry>
+        <title type="html"><![CDATA[2d 图形库开发(一)]]></title>
+        <id>https://gty215615.github.io/post/2d-tu-xing-ku-kai-fa-yi/</id>
+        <link href="https://gty215615.github.io/post/2d-tu-xing-ku-kai-fa-yi/">
+        </link>
+        <updated>2022-08-27T11:15:00.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>2d 几何图形都是由不同路径组成, 因此要绘制出2d 几何图形.要先从绘制路径开始 ,考虑到路径的宽度的问题, 可以使用三角形来模拟线段组成的路径,同时利用渲染管线的 triangle-list 模式来减少重复顶点的数量提升渲染效率.</p>
+</blockquote>
+<p><strong>在绘制路径之前先规定一下路径绘制过程中的规则</strong><br>
+1. 路径由无数条线段组成, 一条线段由两个点组成, 点是路径组成的最小单元<br>
+2. 点具有位置属性, 同时由于要模拟线段的宽度,所以我们要模拟出这种宽短,在沿着线段首尾两点组成的向量的法向正方向与法向负方向同时延伸形成线段的宽.因此点还要存储其法向数据</p>
+<pre><code class="language-rust">pub struct PathPoint {
+    pub pos:    Vector2f,
+    pub normal: Vector2f
+}
+</code></pre>
+<h3 id="线段">线段</h3>
+<p>先从最简单的线段入手, 设置两个点组成一条线段,计算组成线段的两个点的法线方向, 如下图<br>
+<img src="https://gty215615.github.io/post-images/1661601885899.png" alt="" loading="lazy"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><msub><mi>P</mi><mn>0</mn></msub><msub><mi>P</mi><mn>1</mn></msub></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{P_0P_1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1163299999999998em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9663299999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span> 为向量方向 , 则向量法向为 垂直<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><msub><mi>P</mi><mn>0</mn></msub><msub><mi>P</mi><mn>1</mn></msub></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{P_0P_1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1163299999999998em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9663299999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span>的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><msub><mi>P</mi><mn>0</mn></msub><mi>A</mi></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{P_0A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1163299999999998em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9663299999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">A</span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span>因此线段的宽度可以由 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><msub><mi>P</mi><mn>0</mn></msub><msub><mi>P</mi><mn>1</mn></msub></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{P_0P_1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1163299999999998em;vertical-align:-0.15em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9663299999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.25233em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span> 向其法线两侧延伸</p>
+<pre><code class="language-rust">// ...
+pub fn stroke_line(points:&amp;[PathPoint] , stroke:Stroke ,  out:&amp;mut Mesh){
+    let w = stroke.width * 0.5;
+    let idx = out.vertices.len() as u16;
+    out.color_triangle(points[0].pos + points[0].normal * w, Color::WHITE);
+    out.color_triangle(points[0].pos - points[0].normal * w, Color::WHITE);
+
+    out.color_triangle(points[1].pos + points[1].normal * w, Color::WHITE);
+    out.color_triangle(points[1].pos - points[1].normal * w, Color::WHITE);
+
+    out.add_triangle(idx + 0, idx + 2, idx + 3);
+    out.add_triangle(idx + 0, idx + 1, idx + 3);
+}
+// ...
+</code></pre>
+<p>其法向的计算也很简单,计算出线段的方向向量之后,对此此向量进行单位化,再将其旋转 90度即可求得其法向方向.</p>
+<pre><code class="language-rust">pub fn add_line_segment(&amp;mut self , pos:[Vector2f;2]) {
+    // 获取到线段法向量
+    let normal = (pos[1] - pos[0]).normalize().rot_90();
+
+    self.add_point(pos[0], normal);
+    self.add_point(pos[1], normal);
+}
+</code></pre>
+<p>采用此方法绘制直线的缺点就是会导致顶点数增加, 对于一条线段来说其顶点由 2 个拓展为 4 个. 绘制结果<img src="https://gty215615.github.io/post-images/1661603106078.png" alt="" loading="lazy"></p>
+<h3 id="折角绘制">折角绘制</h3>
+<p>对于两条线段连接处的绘制如果不做处理的话就会出现<br>
+<img src="https://gty215615.github.io/post-images/1661605469837.png" alt="" loading="lazy"> 这种情况,为了使得两条线段连接处显得更加的平滑,需要对折角处进行处理<br>
+首先找到两条线段的单位法向向量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>j</mi><mi>d</mi></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{jd}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1718799999999998em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9774399999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">d</span></span></span><span style="top:-3.26344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span> 、<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>j</mi><mi>f</mi></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{jf}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1718799999999998em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9774399999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span><span style="top:-3.26344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span> ,通过平行四边形法则计算得出两线段折角平分线方向 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>j</mi><mi>m</mi></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{jm}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.13696em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.94252em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">m</span></span></span><span style="top:-3.22852em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span> , 此为 2 个单位宽度的法向量长度 , 因此要获得折角平分线在 单位宽度的长度时还要将其除以 2.0 , 从 j 点出发, 沿着此方向及其负方向各 延伸出一个顶点,作为折角点, 最终连接延伸出来的 6 个顶点构建出 4 个新的三角形来实现对线段连接折角的处理<br>
+<img src="https://gty215615.github.io/post-images/1661606524799.png" alt="" loading="lazy"></p>
+<p>代码实现</p>
+<pre><code class="language-rust">pub fn add_line_opened(&amp;mut self , positions:Vec&lt;Vector2f&gt;) {
+        let n = positions.len();
+        self.reserve(n);
+        // 由于目前不考虑路径闭合的情形 因此 第一个点与最后一个点要单独算
+        let mut n0 = (positions[1] - positions[0]).normalize().rot_90();
+        self.add_point(positions[0], n0);
+        for i in 1..n - 1 {
+            let mut n1 = (positions[i + 1] - positions[i]).normalize().rot_90();
+            if n0 == Vector2f::ZERO {
+                n0 = n1;
+            }else if n1 == Vector2f::ZERO {
+                n1 = n0;
+            }
+            let normal = ((n0 + n1) / 2.0).normalize();
+            self.add_point(positions[i], normal);
+            n0 = n1;
+        }
+
+        // 计算最后一个点
+        self.add_point(positions[n - 1], (positions[n - 1] - positions[ n - 2]).normalize().rot_90());
+}
+
+// 生成顶点数据
+
+pub fn stroke_path(points:&amp;[PathPoint] , stroke:Stroke ,  out:&amp;mut Mesh ) {
+
+    let w = stroke.width * 0.5;
+    let idx = out.vertices.len() as u16;
+    let n = points.len();
+    out.reserve_vertex( n * 2);
+    out.reserve_index(n * 2);
+
+    let step = 2_u16;
+    for i in 0..n {
+        let is_connect_prev_point = if i &gt; 0 { true } else { false };
+        out.color_triangle(points[i].pos + points[i].normal * w, Color::WHITE);
+        out.color_triangle(points[i].pos - points[i].normal * w, Color::WHITE);
+        if is_connect_prev_point {
+            let i = (i - 1) as u16;
+            //
+            // [ 0 , 1 , 3 ]
+            // [ 0 , 2 , 3 ]
+            // [ 2,  3,  5 ]
+            // [ 2 , 4 , 5 ]
+            out.add_triangle(idx + i * step + 0, idx + i * step + 1, idx + i * step + 3);
+            out.add_triangle(idx + i * step + 0, idx + i * step + 2, idx + i * step + 3);
+        }
+    }
+
+}
+</code></pre>
+<p>最终效果:<br>
+<img src="https://gty215615.github.io/post-images/1661611067683.png" alt="" loading="lazy"></p>
+<p>可以看到已经达到来预期的效果,但是还是可以发现线条上出现了锯齿,下期来实现一下线条的反走样效果.</p>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/473583272">使用 OpenGL 实现线型动画的教程来啦！</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/59541559">在 WebGL 中绘制直线</a></li>
+<li><a href="https://crates.io/crates/egui">egui</a></li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ 2d 图形库开发]]></title>
+        <id>https://gty215615.github.io/post/cong-ling-shi-xian-yi-ge-gui-xi-tong/</id>
+        <link href="https://gty215615.github.io/post/cong-ling-shi-xian-yi-ge-gui-xi-tong/">
+        </link>
+        <updated>2022-08-27T00:59:41.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>由于最近学习 WebGPU 没有目标, 加上最近对 2d 图形库的实现比较感兴趣, 所以想实现一个玩具2d 图形系统来检验自己的学习成果. 因此就有了这个项目, 开了个新坑, 希望能坚持下去 🐶</p>
+</blockquote>
+<h2 id="实现思路">实现思路</h2>
+<p>目前整体设计思路就是:</p>
+<ol>
+<li>实现 2d 图元 线(line) 、矩形(rectangle) 、圆(circle) 、曲线(curve), 并将 2d 图形拆分成不同大小的三角形图元,</li>
+<li>将这些图元传递到 WebGPU 的渲染管线中去绘制.<br>
+<img src="https://gty215615.github.io/post-images/1661563240757.png" alt="" loading="lazy"></li>
+</ol>
+<h2 id="项目搭建">项目搭建</h2>
+<p>整体思路确定下来之后 就是进行项目开发 , 准备用 rust 开发这个 2d 图形库, 窗口使用 winit 库 , 渲染后端使用 WebGPU 的 rust 实现 wgpu ,</p>
+<p>用 cargo 来创建一个新的 rust 项目 , 新建几个子项目 ,整理项目结构如下<br>
+<img src="https://gty215615.github.io/post-images/1661598510154.png" alt="" loading="lazy"></p>
+<p>对项目进行的分层 , 包括 核心层(core)、工具层(function) ,<br>
+1. core 中包括了 数学库(math) 、 颜色(color)<br>
+2. function 中包括了渲染后端(render)、窗口(window)、2d 绘制模块(paint)</p>
+<p>项目构建完毕,下期正式开始开发.</p>
+]]></content>
+    </entry>
+</feed>
